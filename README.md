@@ -9,7 +9,7 @@ A basic stateful React.js app by Grant Abel, Ravin Fisher, Henry Oberholtzer
     - Body
         - InformationColumn
             * Produce Availability
-            * monthToRender state
+            * what to render state
             - SelectComponent
                 * Options (Months of the year)
                 * CallbackFunction (display produce list)
