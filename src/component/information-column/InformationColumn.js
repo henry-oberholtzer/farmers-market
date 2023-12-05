@@ -1,5 +1,6 @@
 import React from "react";
-import SelectOptions from "./select-options";
+import SelectOptions from "./SelectOptions";
+import LocationList from "./LocationList";
 import marketSchedule from "../../data/market-schedule";
 
 class InformationColumn extends React.Component {
@@ -10,22 +11,42 @@ class InformationColumn extends React.Component {
         }
     }
 
-    changeDisplayOption(id) {
-        console.log(id)
+    changeDisplayOption = (id) => {
+        this.setState({
+            optionToDisplay: id,
+            optionData: this.filterData(id)
+        });
+    }
+
+    filterData = (id) => {
+        const data = marketSchedule.filter(option => Object.values(option).includes(id))[0]
+        return data
     }
 
     render(){
+        let currentlyVisibleState = null;
+        if (this.state.optionToDisplay && this.state.optionData) {
+            currentlyVisibleState = <LocationList
+            location={this.state.optionData.location}
+            day={this.state.optionData.day}
+            time={this.state.optionData.hours}
+            booth={this.state.optionData.booth}
+        />
+        } else if (this.state.optionToDisplay && !this.state.optionData) {
+            currentlyVisibleState = <LocationList
+            location="No Market Today"
+            day={this.state.optionToDisplay}
+            time="Closed"
+            booth=""
+            />
+        }
         return(
             <React.Fragment>
                 <SelectOptions 
-                    array={["Monday", "Tuesday", "Wednesday"]}
+                    array={["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]}
                     onChangeFunction={this.changeDisplayOption}
                     />
-                <div>
-                    <h2>Pioneer Courhouse Square</h2>
-                    <h3>Monday - 10:00am - 2:00pm</h3>
-                    <p>Booth 7C</p>
-                </div>
+                {currentlyVisibleState}
             </React.Fragment>
             );
     }
