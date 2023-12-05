@@ -5,16 +5,16 @@ const LocationList = (props) => {
     return(
         <React.Fragment>
             <h2>{props.location}</h2>
-            <h3>{props.day} - {props.time}</h3>
-            <p>{props.booth}</p>
+            <h3>{props.day} - {props.hours}</h3>
+            <p><h4>You can locate us at booth:</h4> {props.booth}</p>
         </React.Fragment>
     )
 }
 
 LocationList.propTypes = {
-    location: PropTypes.string,
     day: PropTypes.string,
-    time: PropTypes.string,
+    location: PropTypes.string,
+    hours: PropTypes.string,
     booth: PropTypes.string
 }
 

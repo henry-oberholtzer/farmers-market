@@ -1,7 +1,6 @@
 import React from "react";
 import SelectOptions from "./SelectOptions";
-import LocationList from "./LocationList";
-import marketSchedule from "../../data/market-schedule";
+import PropTypes from "prop-types";
 
 class InformationColumn extends React.Component {
     constructor(props) {
@@ -10,8 +9,9 @@ class InformationColumn extends React.Component {
             optionToDisplay: ""
         }
     }
-
+    
     changeDisplayOption = (id) => {
+        console.log(id)
         this.setState({
             optionToDisplay: id,
             optionData: this.filterData(id)
@@ -19,37 +19,35 @@ class InformationColumn extends React.Component {
     }
 
     filterData = (id) => {
-        const data = marketSchedule.filter(option => Object.values(option).includes(id))[0]
-        return data
+        return this.props.data.filter(option => Object.values(option).includes(id))[0]
     }
 
     render(){
         let currentlyVisibleState = null;
         if (this.state.optionToDisplay && this.state.optionData) {
-            currentlyVisibleState = <LocationList
-            location={this.state.optionData.location}
-            day={this.state.optionData.day}
-            time={this.state.optionData.hours}
-            booth={this.state.optionData.booth}
-        />
-        } else if (this.state.optionToDisplay && !this.state.optionData) {
-            currentlyVisibleState = <LocationList
-            location="No Market Today"
-            day={this.state.optionToDisplay}
-            time="Closed"
-            booth=""
-            />
+            currentlyVisibleState = this.props.componentToRender(this.state.optionData)
         }
         return(
             <React.Fragment>
+                <h1>{this.props.categoryTitle}</h1>
+                <h2>{this.props.selectLabel}</h2>
                 <SelectOptions 
-                    array={["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]}
+                    array={this.props.selectOptions}
                     onChangeFunction={this.changeDisplayOption}
-                    />
+                />
                 {currentlyVisibleState}
             </React.Fragment>
             );
     }
+}
+
+InformationColumn.propTypes = {
+    data: PropTypes.array,
+    selectOptions: PropTypes.array,
+    componentToRender: PropTypes.func,
+    selectLabel: PropTypes.string,
+    categoryTitle: PropTypes.string
+
 }
 
 export default InformationColumn;
