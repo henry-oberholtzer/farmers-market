@@ -11,7 +11,7 @@ class InformationColumn extends React.Component {
     }
     
     changeDisplayOption = (id) => {
-        console.log(id)
+        console.log(this.filterData(id))
         this.setState({
             optionToDisplay: id,
             optionData: this.filterData(id)
@@ -19,7 +19,15 @@ class InformationColumn extends React.Component {
     }
 
     filterData = (id) => {
-        return this.props.data.filter(option => Object.values(option).includes(id))[0]
+        const filterArray = this.props.data.filter(option => Object.values(option).includes(id))
+        if (this.props.dataToRenderIsArrayOrObject) {
+            return {
+                selection: id,
+                array: this.props.data
+            }
+        } else {
+            return filterArray[0]
+        }
     }
 
     render(){
@@ -28,7 +36,7 @@ class InformationColumn extends React.Component {
             currentlyVisibleState = this.props.componentToRender(this.state.optionData)
         }
         return(
-            <React.Fragment>
+            <div>
                 <h1>{this.props.categoryTitle}</h1>
                 <h2>{this.props.selectLabel}</h2>
                 <SelectOptions 
@@ -36,7 +44,8 @@ class InformationColumn extends React.Component {
                     onChangeFunction={this.changeDisplayOption}
                 />
                 {currentlyVisibleState}
-            </React.Fragment>
+            </div>
+            
             );
     }
 }
@@ -45,9 +54,9 @@ InformationColumn.propTypes = {
     data: PropTypes.array,
     selectOptions: PropTypes.array,
     componentToRender: PropTypes.func,
+    dataToRenderIsArrayOrObject: PropTypes.bool,
     selectLabel: PropTypes.string,
     categoryTitle: PropTypes.string
-
 }
 
 export default InformationColumn;
